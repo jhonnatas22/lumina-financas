@@ -1,0 +1,11 @@
+data,descricao,valor,tipo
+01/09/2026,Salário,3500.00,entrada
+02/09/2026,Supermercado União,-350.50,saida
+03/09/2026,Internet,-99.90,saida
+05/09/2026,Aluguel,-1200.00,saida
+06/09/2026,Uber,-42.30,saida
+08/09/2026,Farmácia Central,-87.40,saida
+10/09/2026,Netflix,-39.90,saida
+12/09/2026,iFood,-64.80,saida
+15/09/2026,Posto Shell,-180.00,saida
+18/09/2026,Curso de Inglês,-199.00,saida

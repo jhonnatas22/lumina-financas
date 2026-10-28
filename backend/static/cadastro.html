@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta grátis · Lumina Finanças</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+<div class="auth-wrap">
+  <aside class="auth-side">
+    <a href="index.html" class="logo" style="margin-bottom:40px">
+      <span class="logo-mark"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <h2>Em 3 minutos você descobre para onde vai cada real.</h2>
+    <p>Cadastro grátis. Importe o extrato, veja o dashboard e só depois decida se quer evoluir.</p>
+    <ul class="check-list" style="margin-top:24px">
+      <li>Sem cartão de crédito</li>
+      <li>Categorização automática do extrato</li>
+      <li>Seus dados criptografados e isolados</li>
+    </ul>
+  </aside>
+  <main class="auth-form-side">
+    <div class="auth-card">
+      <h1>Crie sua conta gratuita</h1>
+      <p>Comece no plano Essencial. Faça upgrade quando quiser.</p>
+      <div class="auth-error" id="erro"></div>
+      <form id="formCadastro">
+        <div class="field">
+          <label>Nome completo</label>
+          <input type="text" id="nome" required placeholder="Seu nome">
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="email" required placeholder="voce@email.com">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Senha</label>
+            <input type="password" id="senha" required minlength="6" placeholder="Mín. 6 caracteres">
+          </div>
+          <div class="field">
+            <label>Confirmar senha</label>
+            <input type="password" id="senha2" required placeholder="Repita a senha">
+          </div>
+        </div>
+        <div class="field">
+          <label>Plano</label>
+          <select id="plano">
+            <option value="essencial">Essencial — Grátis</option>
+            <option value="pro">Pro — R$ 19,90/mês</option>
+            <option value="business">Business — R$ 49,90/mês</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnCriar">Criar conta e acessar</button>
+      </form>
+      <p class="auth-alt">Já tem conta? <a href="login.html">Entrar</a></p>
+    </div>
+  </main>
+</div>
+<script>
+const params = new URLSearchParams(location.search);
+if (params.get('plano')) document.getElementById('plano').value = params.get('plano');
+</script>
+<script src="js/api.js"></script>
+<script>
+document.getElementById('formCadastro').addEventListener('submit', async e => {
+  e.preventDefault();
+  const erro = document.getElementById('erro');
+  erro.style.display = 'none';
+  const senha = document.getElementById('senha').value;
+  if (senha !== document.getElementById('senha2').value) {
+    erro.textContent = 'As senhas não coincidem.'; erro.style.display = 'block'; return;
+  }
+  const btn = document.getElementById('btnCriar');
+  btn.disabled = true; btn.textContent = 'Criando conta…';
+  try {
+    await API.register({
+      nome: document.getElementById('nome').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      senha, plano: document.getElementById('plano').value, role: 'cliente',
+    });
+    // Após cadastro, já entra na conta
+    await API.login(document.getElementById('email').value.trim(), senha, 'cliente');
+    location.href = 'app.html';
+  } catch (err) {
+    erro.textContent = err.message; erro.style.display = 'block';
+  } finally { btn.disabled = false; btn.textContent = 'Criar conta e acessar'; }
+});
+</script>
+</body>
+</html>

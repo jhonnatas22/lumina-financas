@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Funcionário · Lumina Finanças</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"><svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <nav class="side-nav">
+      <a href="#" class="active"><span class="ico">✆</span> Fila de atendimento</a>
+      <a href="#base"><span class="ico">?</span> Base de conhecimento</a>
+    </nav>
+    <div class="side-footer">
+      <div class="side-user">
+        <span class="avatar" style="background:#f59e0b">F</span>
+        <div><strong>Funcionário</strong><small id="userEmail">func@lumina.com</small></div>
+      </div>
+      <button class="btn btn-outline btn-block" style="margin-top:10px" onclick="API.logout()">Sair</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <button class="menu-toggle" style="position:fixed;top:18px;left:18px;z-index:160;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 12px" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div class="topbar">
+      <div><h1>Portal do funcionário</h1><span class="badge-role func" style="margin-top:6px">Acesso interno</span></div>
+      <span class="date" id="hoje"></span>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi-card"><small>Chamados abertos</small><span class="val" id="kAbertos">—</span></div>
+      <div class="kpi-card"><small>Em andamento</small><span class="val" style="color:var(--amber)" id="kAndamento">—</span></div>
+      <div class="kpi-card"><small>Resolvidos</small><span class="val" style="color:var(--green)" id="kResolvidos">—</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Fila de atendimento</h3><span class="hint">suporte a usuários do SaaS</span></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Usuário</th><th>Assunto</th><th>Aberto em</th><th>Status</th><th></th></tr></thead>
+        <tbody id="tbChamados"></tbody></table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Base de conhecimento rápida</h3></div>
+      <details class="faq-item"><summary>Importação de CSV rejeitada — o que verificar?</summary>
+        <p>Confirmar se o arquivo possui cabeçalho com colunas data, descrição, valor e tipo; se as datas seguem o formato dd/mm/aaaa; e se o separador é vírgula. Orientar o usuário a exportar novamente pelo internet banking.</p></details>
+      <details class="faq-item"><summary>Usuário não consegue redefinir a senha</summary>
+        <p>Verificar spam da caixa de entrada, validar o e-mail cadastrado e, se necessário, gerar token manualmente pelo endpoint administrativo.</p></details>
+      <details class="faq-item"><summary>Categorias incorretas após importação</summary>
+        <p>O sistema aprende com as correções do usuário. Orientá-lo a ajustar a categoria manualmente — a preferência será aplicada nas próximas importações.</p></details>
+    </div>
+  </main>
+</div>
+<script src="js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!localStorage.getItem('lumina_token')) { location.href = 'login.html?tipo=funcionario'; return; }
+  try {
+    const me = await API.me();
+    document.getElementById('userEmail').textContent = me.email || 'func@lumina.com';
+  } catch (e) {}
+  document.getElementById('hoje').textContent = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const fila = await API.funcionarioFila();
+  const count = st => fila.filter(c => c.status === st).length;
+  document.getElementById('kAbertos').textContent = count('aberto');
+  document.getElementById('kAndamento').textContent = count('andamento');
+  document.getElementById('kResolvidos').textContent = count('resolvido');
+
+  const chips = { aberto: '<span class="chip" style="background:rgba(239,68,68,.12);color:#fca5a5;border-color:rgba(239,68,68,.3)">Aberto</span>',
+    andamento: '<span class="chip" style="background:rgba(245,158,11,.12);color:#fcd34d;border-color:rgba(245,158,11,.3)">Em andamento</span>',
+    resolvido: '<span class="chip cat-alimentação">Resolvido</span>' };
+  document.getElementById('tbChamados').innerHTML = fila.map(c => `<tr>
+    <td>${c.id}</td><td><strong>${c.usuario}</strong></td><td>${c.assunto}</td>
+    <td>${new Date(c.criado + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+    <td>${chips[c.status] || c.status}</td>
+    <td><div class="row-actions">${c.status !== 'resolvido' ? `<button onclick="this.closest('tr').querySelector('.chip').outerHTML='${chips.resolvido.replace(/"/g, '&quot;')}';alert('Chamado movido para resolvido.')">Resolver</button>` : ''}</div></td>
+  </tr>`).join('');
+});
+</script>
+</body>
+</html>

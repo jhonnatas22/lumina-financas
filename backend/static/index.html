@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Finanças — Gestão financeira inteligente com dashboard</title>
+<meta name="description" content="Importe seu extrato bancário em CSV e transforme dados brutos em clareza financeira. Dashboard, categorização automática, metas e relatórios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header" id="topo">
+  <div class="container header-inner">
+    <a href="#topo" class="logo">
+      <span class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg>
+      </span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <nav class="nav">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#planos">Planos</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-actions">
+      <a href="login.html" class="btn btn-ghost">Entrar</a>
+      <a href="cadastro.html" class="btn btn-primary">Criar conta grátis</a>
+    </div>
+    <button class="menu-toggle" aria-label="Abrir menu">☰</button>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="badge">Categorização automática de extratos · Sem planilhas manuais</span>
+      <h1>Seu dinheiro finalmente <span class="grad-text">explicado</span> em um único painel.</h1>
+      <p class="hero-sub">Importe o extrato do seu banco em CSV e veja em segundos para onde vai cada real: receitas, despesas, categorias, metas e alertas — tudo organizado automaticamente em um dashboard feito para decidir melhor.</p>
+      <div class="hero-ctas">
+        <a href="cadastro.html" class="btn btn-primary btn-lg">Começar gratuitamente</a>
+        <a href="#como-funciona" class="btn btn-outline btn-lg">Ver como funciona</a>
+      </div>
+      <p class="hero-note">Sem cartão de crédito · Leva menos de 2 minutos</p>
+      <div class="hero-proof">
+        <div class="avatars">
+          <span class="avatar">M</span><span class="avatar">J</span><span class="avatar">A</span><span class="avatar">R</span>
+        </div>
+        <p><strong>+3.200 usuários</strong> organizando as finanças com clareza</p>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dash-card floating">
+        <div class="dash-head">
+          <span class="dot green"></span><span class="dot yellow"></span><span class="dot red"></span>
+          <span class="dash-title">Dashboard · Setembro</span>
+        </div>
+        <div class="dash-kpis">
+          <div class="kpi"><small>Saldo atual</small><strong>R$ 4.250,00</strong></div>
+          <div class="kpi"><small>Receitas do mês</small><strong class="pos">R$ 5.000,00</strong></div>
+          <div class="kpi"><small>Despesas do mês</small><strong class="neg">R$ 2.750,00</strong></div>
+          <div class="kpi"><small>Economia</small><strong class="pos">R$ 2.250,00</strong></div>
+        </div>
+        <div class="dash-body">
+          <div class="donut-wrap">
+            <svg viewBox="0 0 120 120" class="donut">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#1c2233" stroke-width="14"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#22c55e" stroke-width="14" stroke-dasharray="100 290" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#6366f1" stroke-width="14" stroke-dasharray="80 310" stroke-dashoffset="-102" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#f59e0b" stroke-width="14" stroke-dasharray="60 330" stroke-dashoffset="-184" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#ec4899" stroke-width="14" stroke-dasharray="40 350" stroke-dashoffset="-246" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="donut-center"><strong>R$ 2.750</strong><small>gastos no mês</small></div>
+          </div>
+          <ul class="legend">
+            <li><span class="lg green"></span>Alimentação <b>R$ 650</b></li>
+            <li><span class="lg indigo"></span>Moradia <b>R$ 1.200</b></li>
+            <li><span class="lg amber"></span>Transporte <b>R$ 350</b></li>
+            <li><span class="lg pink"></span>Assinaturas <b>R$ 200</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="alert-card floating-2">
+        <span class="alert-icon">⚠</span>
+        <div><strong>Alerta inteligente</strong><p>Gastos com alimentação subiram <b>25%</b> em relação a agosto.</p></div>
+      </div>
+      <div class="goal-card floating-3">
+        <div class="goal-head"><strong>Meta: Notebook novo</strong><span>37,5%</span></div>
+        <div class="goal-bar"><span style="width:37.5%"></span></div>
+        <small>R$ 1.500 de R$ 4.000 guardados</small>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bg"></div>
+</section>
+
+<!-- ================= LOGOS / SOCIAL PROOF ================= -->
+<section class="logos">
+  <div class="container">
+    <p>Compatível com extratos dos principais bancos</p>
+    <div class="logos-row">
+      <span>Banco do Brasil</span><span>Itaú</span><span>Nubank</span><span>Bradesco</span><span>Inter</span><span>Santander</span><span>Caixa</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMO FUNCIONA ================= -->
+<section class="section" id="como-funciona">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Simples por design</span>
+      <h2>Do extrato bruto à decisão clara em 3 passos</h2>
+      <p>Você não precisa entender de finanças. O sistema organiza tudo para você.</p>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <span class="step-num">01</span>
+        <h3>Importe seu extrato</h3>
+        <p>Envie o arquivo <b>.csv</b> do seu banco. Nós lemos, validamos, convertemos datas e valores, removemos duplicidades e identificamos entradas e saídas.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">02</span>
+        <h3>Ganhe categorização automática</h3>
+        <p>Cada transação é classificada por regras inteligentes: "supermercado" vira Alimentação, "uber" vira Transporte. E você pode ajustar quando quiser — o sistema aprende.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">03</span>
+        <h3>Decida com o dashboard</h3>
+        <p>Saldo, receitas, despesas, economia, gráficos por categoria, evolução mensal, metas e alertas. Tudo em uma tela que responde: <i>"para onde está indo meu dinheiro?"</i></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOBRE / AUTORIDADE ================= -->
+<section class="section section-alt" id="sobre">
+  <div class="container about-grid">
+    <div class="about-visual">
+      <div class="stat-tile"><strong>98%</strong><small>de precisão na categorização por regras</small></div>
+      <div class="stat-tile"><strong>3 min</strong><small>do upload ao dashboard completo</small></div>
+      <div class="stat-tile"><strong>256-bit</strong><small>criptografia e dados isolados por usuário</small></div>
+    </div>
+    <div class="about-copy">
+      <span class="eyebrow">Por que existe</span>
+      <h2>Criado para quem trabalha muito e ainda se perde no próprio dinheiro</h2>
+      <p>A maioria das pessoas não tem problema de ganhar pouco — tem problema de <b>não enxergar</b>. Planilhas morrem na segunda semana. Apps de banco mostram dados, não contexto.</p>
+      <p>O Lumina Finanças nasceu para transformar extratos bancários em informação de verdade: processamento automático, categorização com aprendizado, metas visuais e alertas que avisam <i>antes</i> do problema.</p>
+      <ul class="check-list">
+        <li>Processamento completo de CSV: validação, conversão e deduplicação</li>
+        <li>Cada usuário acessa exclusivamente os próprios dados</li>
+        <li>Aprende com suas correções de categoria a cada importação</li>
+        <li>Relatórios exportáveis em CSV e PDF</li>
+      </ul>
+      <a href="cadastro.html" class="btn btn-primary">Experimentar agora — é grátis</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RECURSOS / SERVIÇO ================= -->
+<section class="section" id="recursos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Tudo em uma plataforma</span>
+      <h2>Um sistema financeiro completo, não um simples controle de gastos</h2>
+    </div>
+    <div class="features">
+      <div class="feature-card">
+        <div class="f-icon">⇪</div>
+        <h3>Importação inteligente de CSV</h3>
+        <p>Upload do extrato com leitura automática de colunas, validação, conversão de datas/valores, detecção de duplicidades e vínculo à sua conta.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">◎</div>
+        <h3>Categorização automática + aprendizado</h3>
+        <p>Regras que classificam alimentação, transporte, moradia, saúde, assinaturas e mais. Suas correções manuais viram preferência para a próxima importação.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">▦</div>
+        <h3>Dashboard financeiro completo</h3>
+        <p>Saldo atual, receitas, despesas e economia do mês — além de gráficos de distribuição por categoria e evolução mês a mês.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">✎</div>
+        <h3>CRUD total de movimentações</h3>
+        <p>Cadastre, edite, exclua, filtre e pesquise receitas e despesas manualmente. Filtros por período, categoria, tipo, valor e descrição.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">⚑</div>
+        <h3>Metas financeiras visuais</h3>
+        <p>Defina objetivos — notebook, viagem, reserva de emergência — e acompanhe o progresso direto no dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">⚠</div>
+        <h3>Alertas e orçamentos</h3>
+        <p>Receba avisos quando uma categoria subir demais ou quando você estiver perto de estourar o orçamento definido.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">⬇</div>
+        <h3>Relatórios mensais exportáveis</h3>
+        <p>Resumo de receitas, despesas e saldo, ranking de maiores categorias de gasto e exportação para CSV ou PDF.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-icon">🔒</div>
+        <h3>Segurança de verdade</h3>
+        <p>Autenticação JWT, senhas com hash, sessões controladas e isolamento total de dados por usuário.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BENEFÍCIOS ================= -->
+<section class="section section-alt" id="beneficios">
+  <div class="container benefits-grid">
+    <div class="benefits-copy">
+      <span class="eyebrow">O que muda na prática</span>
+      <h2>O fim da frase "cadê meu dinheiro?"</h2>
+      <p>Quando você enxerga, decide. O Lumina entrega clareza que gera resultado:</p>
+      <div class="benefit-item">
+        <span class="b-num">−18%</span>
+        <div><h4>Gasto médio com alimentação após 60 dias de uso</h4><p>Ao ver o valor real acumulado, o corte acontece naturalmente.</p></div>
+      </div>
+      <div class="benefit-item">
+        <span class="b-num">1ª</span>
+        <div><h4>Reserva de emergência criada por quem nunca conseguiu poupar</h4><p>Metas visuais transformam intenção em hábito mensurável.</p></div>
+      </div>
+      <div class="benefit-item">
+        <span class="b-num">24/7</span>
+        <div><h4>Clareza disponível a qualquer momento</h4><p>Importou o extrato? O painel responde na hora — sem esperar fim de mês.</p></div>
+      </div>
+    </div>
+    <div class="quote-stack">
+      <blockquote class="quote-card">
+        <p>"Eu achava que ganhava bem mas vivia no vermelho. No primeiro mês descobri que assinaturas comiam R$ 380 da minha renda. Cancelei 4 no mesmo dia."</p>
+        <footer><strong>Mariana Duarte</strong><span>Designer · São Paulo</span></footer>
+      </blockquote>
+      <blockquote class="quote-card">
+        <p>"Importei o CSV do Nubank em 3 minutos e o gráfico me mostrou exatamente onde cortar. Em 3 meses bati minha primeira meta de R$ 5 mil."</p>
+        <footer><strong>Rafael Lima</strong><span>Desenvolvedor · Curitiba</span></footer>
+      </blockquote>
+      <blockquote class="quote-card">
+        <p>"Uso com minha esposa. Cada um vê só os próprios dados, e o relatório mensal virou nossa reunião financeira de domingo."</p>
+        <footer><strong>Juliana & Pedro Alves</strong><span>Empreendedores · Belo Horizonte</span></footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUEBRA DE OBJEÇÕES ================= -->
+<section class="section" id="objecoes">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Sem letras miúdas</span>
+      <h2>Talvez você esteja pensando…</h2>
+    </div>
+    <div class="objections">
+      <div class="obj-card">
+        <h4>"Meus dados bancários ficam seguros?"</h4>
+        <p>Sim. Trabalhamos apenas com o arquivo CSV que <b>você</b> exporta e envia. Não pedimos senha de banco, não conectamos em instituições. Seus dados são criptografados e isolados — ninguém mais acessa.</p>
+      </div>
+      <div class="obj-card">
+        <h4>"E se eu não entender nada de finanças?"</h4>
+        <p>Melhor ainda — o sistema foi feito para isso. Você não precisa saber o que é fluxo de caixa. Importou o extrato, o dashboard traduz tudo em linguagem simples.</p>
+      </div>
+      <div class="obj-card">
+        <h4>"Meu banco não exporta CSV?"</h4>
+        <p>Todos os principais bancos brasileiros exportam extrato em CSV pelo internet banking ou app. E se o seu formato for diferente, nossa validação identifica as colunas automaticamente.</p>
+      </div>
+      <div class="obj-card">
+        <h4>"É mais um app que vou abandonar?"</h4>
+        <p>Não — porque aqui você não precisa registrar nada manualmente. A única ação é importar o extrato uma vez por mês. Em 3 minutos, está tudo pronto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLANOS / OFERTA ================= -->
+<section class="section section-alt" id="planos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Investimento</span>
+      <h2>Comece grátis. Evolua quando fizer sentido.</h2>
+      <p>Preço de um almoço por mês para nunca mais se perder no próprio dinheiro.</p>
+    </div>
+    <div class="pricing">
+      <div class="price-card">
+        <h3>Essencial</h3>
+        <p class="price"><span>R$</span>0<small>/mês</small></p>
+        <p class="price-desc">Para organizar suas finanças de uma vez.</p>
+        <ul>
+          <li>1 conta bancária</li>
+          <li>5 importações de CSV por mês</li>
+          <li>Dashboard com gráficos essenciais</li>
+          <li>Categorização automática</li>
+          <li>Cadastro manual de movimentações</li>
+        </ul>
+        <a href="cadastro.html" class="btn btn-outline btn-block">Criar conta grátis</a>
+      </div>
+      <div class="price-card featured">
+        <span class="flag">Mais escolhido</span>
+        <h3>Pro</h3>
+        <p class="price"><span>R$</span>19<small>,90/mês</small></p>
+        <p class="price-desc">Para quem quer decisão, não só registro.</p>
+        <ul>
+          <li>Contas bancárias ilimitadas</li>
+          <li>Importações ilimitadas</li>
+          <li>Relatórios mensais em PDF e CSV</li>
+          <li>Metas financeiras com progresso visual</li>
+          <li>Orçamentos por categoria + alertas</li>
+          <li>Comparação entre períodos</li>
+        </ul>
+        <a href="cadastro.html?plano=pro" class="btn btn-primary btn-block">Assinar o Pro</a>
+      </div>
+      <div class="price-card">
+        <h3>Business</h3>
+        <p class="price"><span>R$</span>49<small>,90/mês</small></p>
+        <p class="price-desc">Para MEIs e pequenos negócios.</p>
+        <ul>
+          <li>Tudo do Pro</li>
+          <li>Múltiplos usuários com níveis de acesso</li>
+          <li>Centros de custo por conta</li>
+          <li>Exportação contábil completa</li>
+          <li>Suporte prioritário</li>
+        </ul>
+        <a href="cadastro.html?plano=business" class="btn btn-outline btn-block">Falar com consultor</a>
+      </div>
+    </div>
+    <div class="guarantee">
+      <span class="guarantee-icon">✓</span>
+      <p><strong>Garantia incondicional de 14 dias.</strong> Se não trouxer clareza para suas finanças, devolvemos 100% do valor. Sem perguntas, sem burocracia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section" id="faq">
+  <div class="container faq-container">
+    <div class="section-head">
+      <span class="eyebrow">Perguntas frequentes</span>
+      <h2>Tudo o que você precisa saber antes de começar</h2>
+    </div>
+    <details class="faq-item">
+      <summary>Como funciona a importação do extrato?</summary>
+      <p>Você exporta o extrato do seu banco em formato CSV e faz o upload na plataforma. O sistema identifica as colunas, valida os dados, converte datas e valores, detecta duplicidades e classifica cada movimentação como entrada ou saída — sem nenhuma ação manual.</p>
+    </details>
+    <details class="faq-item">
+      <summary>A categorização automática acerta sempre?</summary>
+      <p>Nas categorias mais comuns (alimentação, transporte, moradia, saúde, assinaturas), a precisão por regras é altíssima. Quando o sistema classifica algo diferente do seu padrão, você corrige com um clique — e essa correção vira regra para as próximas importações.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Preciso cadastrar tudo manualmente todo mês?</summary>
+      <p>Não. A importação do CSV faz o trabalho pesado. O cadastro manual existe como complemento — para lançar uma despesa em dinheiro ou uma receita que não passou pela conta, por exemplo.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Meus dados são compartilhados com terceiros?</summary>
+      <p>Nunca. Seus dados são armazenados com criptografia, isolados por usuário e acessíveis apenas pela sua conta autenticada. Não vendemos nem compartilhamos informações com ninguém.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Posso cancelar quando quiser?</summary>
+      <p>Sim. Não há fidelidade, taxa de cancelamento ou multa. Você cancela em dois cliques e mantém acesso aos seus dados exportáveis.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Funciona no celular?</summary>
+      <p>Sim. Todo o sistema — landing, dashboard, relatórios e metas — é responsivo e funciona em qualquer dispositivo com navegador.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ================= CTA FINAL ================= -->
+<section class="cta-final">
+  <div class="container">
+    <h2>Daqui a um mês, você pode estar exatamente onde está.<br>Ou pode finalmente saber para onde vai seu dinheiro.</h2>
+    <p>Crie sua conta gratuita agora e importe seu primeiro extrato em menos de 3 minutos.</p>
+    <a href="cadastro.html" class="btn btn-light btn-lg">Criar conta grátis</a>
+    <small>Sem cartão de crédito · Sem instalação · Cancele quando quiser</small>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#topo" class="logo">
+        <span class="logo-mark"><svg width="22" height="22" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+        Lumina<span class="logo-accent">Finanças</span>
+      </a>
+      <p>Transformamos extratos bancários em clareza financeira. Gestão inteligente, categorização automática e dashboards que geram decisão.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Produto</h5>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#planos">Planos</a>
+      <a href="cadastro.html">Criar conta</a>
+    </div>
+    <div class="footer-col">
+      <h5>Acesso</h5>
+      <a href="login.html">Entrar na plataforma</a>
+      <a href="login.html?tipo=funcionario">Portal do funcionário</a>
+      <a href="login.html?tipo=admin">Painel administrador</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contato</h5>
+      <a href="mailto:contato@luminafinancas.com.br">contato@luminafinancas.com.br</a>
+      <a href="mailto:suporte@luminafinancas.com.br">suporte@luminafinancas.com.br</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 Lumina Finanças · Todos os direitos reservados</p>
+    <p>Feito com rigor técnico em Python, FastAPI e visualização de dados.</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

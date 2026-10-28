@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrador · Lumina Finanças</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"><svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <nav class="side-nav">
+      <a href="#" class="active"><span class="ico">▦</span> Visão geral</a>
+      <a href="#usuarios"><span class="ico">👥</span> Usuários</a>
+      <a href="#planos"><span class="ico">◈</span> Planos e MRR</a>
+    </nav>
+    <div class="side-footer">
+      <div class="side-user">
+        <span class="avatar" style="background:#ef4444">A</span>
+        <div><strong>Administrador</strong><small id="userEmail">admin@lumina.com</small></div>
+      </div>
+      <button class="btn btn-outline btn-block" style="margin-top:10px" onclick="API.logout()">Sair</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <button class="menu-toggle" style="position:fixed;top:18px;left:18px;z-index:160;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 12px" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div class="topbar">
+      <div><h1>Painel administrador</h1><span class="badge-role admin" style="margin-top:6px">Acesso administrador</span></div>
+      <span class="date" id="hoje"></span>
+    </div>
+
+    <div class="admin-stats">
+      <div class="kpi-card"><small>Usuários cadastrados</small><span class="val" id="stUsers">—</span></div>
+      <div class="kpi-card"><small>Ativos no mês</small><span class="val" style="color:var(--green)" id="stAtivos">—</span></div>
+      <div class="kpi-card"><small>Receita recorrente (MRR)</small><span class="val" style="color:#818cf8" id="stMRR">—</span></div>
+      <div class="kpi-card"><small>Importações de CSV no mês</small><span class="val" id="stImp">—</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Últimos usuários cadastrados</h3><span class="hint">dados isolados por usuário · LGPD compliant</span></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Usuário</th><th>Plano</th><th>Cadastro</th><th style="text-align:right">Ações</th></tr></thead>
+        <tbody id="tbUsers"></tbody></table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Distribuição de planos</h3></div>
+      <div id="planDist" style="display:grid;gap:14px"></div>
+    </div>
+  </main>
+</div>
+<script src="js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!localStorage.getItem('lumina_token')) { location.href = 'login.html?tipo=admin'; return; }
+  try {
+    const me = await API.me();
+    document.getElementById('userEmail').textContent = me.email || 'admin@lumina.com';
+    if (me.role && me.role !== 'admin' && !API.isDemo()) { location.href = 'index.html'; return; }
+  } catch (e) {}
+  document.getElementById('hoje').textContent = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const s = await API.adminStats();
+  document.getElementById('stUsers').textContent = s.usuarios;
+  document.getElementById('stAtivos').textContent = s.ativos_mes;
+  document.getElementById('stMRR').textContent = API.fmt(s.receita_mrr);
+  document.getElementById('stImp').textContent = s.importacoes_mes;
+
+  const planos = {};
+  (s.ultimos_usuarios || []).forEach(u => planos[u.plano] = (planos[u.plano] || 0) + 1);
+  const total = Object.values(planos).reduce((a, b) => a + b, 0) || 1;
+  const cores = { Pro: '#6366f1', Essencial: '#22c55e', Business: '#f59e0b' };
+  document.getElementById('planDist').innerHTML = Object.entries(planos).map(([p, n]) => `
+    <div><div style="display:flex;justify-content:space-between;font-size:.88rem;margin-bottom:6px"><span>${p}</span><b>${n} usuário(s)</b></div>
+    <div class="goal-bar" style="height:10px"><span style="width:${n / total * 100}%;background:${cores[p] || '#94a3b8'}"></span></div></div>`).join('');
+
+  document.getElementById('tbUsers').innerHTML = (s.ultimos_usuarios || []).map(u => `<tr>
+    <td class="admin-user-row"><span class="avatar">${(u.nome || 'U')[0].toUpperCase()}</span><div><strong>${u.nome}</strong><br><small style="color:var(--muted)">${u.email}</small></div></td>
+    <td><span class="chip">${u.plano || 'Essencial'}</span></td>
+    <td>${u.criado ? new Date(u.criado).toLocaleDateString('pt-BR') : '—'}</td>
+    <td style="text-align:right"><div class="row-actions"><button onclick="alert('Funcionalidade disponível no backend conectado.')">Detalhes</button></div></td>
+  </tr>`).join('');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recuperar senha · Lumina Finanças</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+<div class="auth-wrap">
+  <aside class="auth-side">
+    <a href="index.html" class="logo" style="margin-bottom:40px">
+      <span class="logo-mark"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <h2>Acontece com todo mundo.</h2>
+    <p>Enviaremos um link seguro para você redefinir sua senha em poucos segundos.</p>
+  </aside>
+  <main class="auth-form-side">
+    <div class="auth-card">
+      <h1>Recuperar senha</h1>
+      <p>Informe seu e-mail de cadastro.</p>
+      <div class="auth-error" id="erro"></div>
+      <div class="auth-error" id="ok" style="display:none;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4);color:#86efac"></div>
+      <form id="formRec">
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="email" required placeholder="voce@email.com">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Enviar link de recuperação</button>
+      </form>
+      <p class="auth-alt">Lembrou a senha? <a href="login.html">Voltar para o login</a></p>
+    </div>
+  </main>
+</div>
+<script src="js/api.js"></script>
+<script>
+document.getElementById('formRec').addEventListener('submit', async e => {
+  e.preventDefault();
+  const erro = document.getElementById('erro'), ok = document.getElementById('ok');
+  erro.style.display = 'none'; ok.style.display = 'none';
+  try {
+    await API.request ? null : null;
+    const res = await fetch(API.BASE + '/api/auth/recuperar', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: document.getElementById('email').value.trim() }),
+    });
+    if (!res.ok) throw new Error('Não foi possível enviar agora.');
+    ok.textContent = 'Link enviado! Verifique sua caixa de entrada.';
+    ok.style.display = 'block';
+  } catch (err) {
+    // Backend offline: simula o fluxo no modo demo
+    ok.textContent = 'Se este e-mail estiver cadastrado, você receberá o link de recuperação em instantes.';
+    ok.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>

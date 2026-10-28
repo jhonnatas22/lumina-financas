@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Lumina Finanças</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"><svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 20L10.5 12L15 15.5L22 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="5" r="2.4" fill="currentColor"/></svg></span>
+      Lumina<span class="logo-accent">Finanças</span>
+    </a>
+    <nav class="side-nav">
+      <a href="#dashboard" class="active" data-view="dashboard"><span class="ico">▦</span> Dashboard</a>
+      <a href="#transacoes" data-view="transacoes"><span class="ico">⇄</span> Transações</a>
+      <a href="#importar" data-view="importar"><span class="ico">⇪</span> Importar extrato</a>
+      <a href="#metas" data-view="metas"><span class="ico">⚑</span> Metas</a>
+      <a href="#orcamentos" data-view="orcamentos"><span class="ico">◔</span> Orçamentos</a>
+      <a href="#relatorios" data-view="relatorios"><span class="ico">⬇</span> Relatórios</a>
+    </nav>
+    <div class="side-footer">
+      <div class="side-user">
+        <span class="avatar" id="userAvatar">C</span>
+        <div><strong id="userName">Cliente</strong><small id="userEmail">—</small></div>
+      </div>
+      <button class="btn btn-outline btn-block" onclick="API.logout()" style="margin-top:10px">Sair</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <button class="menu-toggle" style="position:fixed;top:18px;left:18px;z-index:160;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 12px" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div class="topbar">
+      <div><h1 id="viewTitle">Dashboard</h1><span class="date" id="hoje"></span></div>
+      <div class="topbar-actions">
+        <button class="btn btn-outline btn-sm" onclick="App.novaTransacao()">+ Nova movimentação</button>
+        <button class="btn btn-primary btn-sm" onclick="App.switchView('importar')">Importar CSV</button>
+      </div>
+    </div>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="view-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card"><small>Saldo atual</small><span class="val" id="kSaldo">—</span></div>
+        <div class="kpi-card"><small>Receitas do mês</small><span class="val" style="color:var(--green)" id="kRec">—</span></div>
+        <div class="kpi-card"><small>Despesas do mês</small><span class="val" style="color:#f87171" id="kDes">—</span></div>
+        <div class="kpi-card"><small>Economia do mês</small><span class="val" id="kEco">—</span><span class="tag pos" id="kEcoPct"></span></div>
+      </div>
+
+      <div class="charts-row">
+        <div class="panel">
+          <div class="panel-head"><h3>Distribuição das despesas</h3><span class="hint">mês atual</span></div>
+          <div class="chart-box"><canvas id="chartDonut"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Evolução financeira mensal</h3><span class="hint">receitas × despesas</span></div>
+          <div class="chart-box"><canvas id="chartLine"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Alertas financeiros</h3><span class="hint">gerados automaticamente</span></div>
+        <div class="alert-list" id="alertList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Últimas movimentações</h3><button class="btn btn-outline btn-sm" onclick="App.switchView('transacoes')">Ver todas</button></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Conta</th><th style="text-align:right">Valor</th></tr></thead>
+          <tbody id="tbUltimas"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRANSAÇÕES ============ -->
+    <section id="view-transacoes" style="display:none">
+      <div class="panel">
+        <div class="filters">
+          <div class="field"><label>De</label><input type="date" id="fDe"></div>
+          <div class="field"><label>Até</label><input type="date" id="fAte"></div>
+          <div class="field"><label>Categoria</label><select id="fCat"><option value="">Todas</option></select></div>
+          <div class="field"><label>Tipo</label><select id="fTipo"><option value="">Todos</option><option value="entrada">Receita</option><option value="saida">Despesa</option></select></div>
+          <div class="field"><label>Buscar</label><input type="text" id="fQ" placeholder="Descrição…"></div>
+          <div class="field"><label>Faixa de valor (máx.)</label><input type="number" id="fVal" placeholder="R$"></div>
+          <button class="btn btn-outline btn-sm" onclick="App.carregarTransacoes()">Filtrar</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Conta</th><th style="text-align:right">Valor</th><th></th></tr></thead>
+          <tbody id="tbTransacoes"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ IMPORTAR ============ -->
+    <section id="view-importar" style="display:none">
+      <div class="panel" style="max-width:720px">
+        <div class="panel-head"><h3>Importar extrato bancário</h3></div>
+        <div class="upload-zone" id="upZone">
+          <div class="up-ico">⇪</div>
+          <p><b>Arraste seu arquivo .csv aqui</b> ou clique para selecionar<br>
+          <span style="font-size:.78rem">Formato esperado: data, descrição, valor, tipo — ex.: 01/09/2026,Supermercado,-350.50,saida</span></p>
+          <input type="file" id="fileCSV" accept=".csv" style="display:none">
+        </div>
+        <div class="import-result" id="importResult">
+          <div class="alert-item info"><strong id="impTitulo">Importação concluída</strong><span id="impDetalhe"></span></div>
+          <div class="import-stats">
+            <div class="import-stat"><strong id="impTotal" style="color:#818cf8">0</strong><small>linhas lidas</small></div>
+            <div class="import-stat"><strong id="impNovas" style="color:var(--green)">0</strong><small>movimentações novas</small></div>
+            <div class="import-stat"><strong id="impDup" style="color:var(--amber)">0</strong><small>duplicidades ignoradas</small></div>
+            <div class="import-stat"><strong id="impCat" style="color:var(--pink)">0</strong><small>categorizadas auto.</small></div>
+          </div>
+          <button class="btn btn-primary btn-block" style="margin-top:18px" onclick="App.switchView('dashboard')">Ver no dashboard</button>
+        </div>
+        <div style="margin-top:22px;padding:16px;border:1px dashed var(--line);border-radius:12px;font-size:.82rem;color:var(--muted)">
+          <b style="color:#c7d2fe">Exemplo de CSV aceito:</b><br>
+          <code>data,descricao,valor,tipo<br>01/09/2026,Salário,3500.00,entrada<br>02/09/2026,Supermercado,-350.50,saida</code>
+          <div style="margin-top:10px"><button class="btn btn-outline btn-sm" onclick="App.baixarExemplo()">Baixar exemplo.csv</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ METAS ============ -->
+    <section id="view-metas" style="display:none">
+      <div class="panel">
+        <div class="panel-head"><h3>Metas financeiras</h3><button class="btn btn-primary btn-sm" onclick="App.novaMeta()">+ Nova meta</button></div>
+        <div class="goals-grid" id="goalsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ ORÇAMENTOS ============ -->
+    <section id="view-orcamentos" style="display:none">
+      <div class="panel" style="max-width:720px">
+        <div class="panel-head"><h3>Orçamentos por categoria</h3><button class="btn btn-primary btn-sm" onclick="App.novoOrcamento()">+ Novo orçamento</button></div>
+        <div id="budgetList" class="alert-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ RELATÓRIOS ============ -->
+    <section id="view-relatorios" style="display:none">
+      <div class="panel" style="max-width:760px">
+        <div class="panel-head"><h3>Relatório mensal</h3></div>
+        <div class="field-row" style="margin-bottom:18px">
+          <div class="field"><label>Mês</label><select id="relMes">
+            <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+            <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+            <option value="7">Julho</option><option value="8">Agosto</option><option value="9" selected>Setembro</option>
+            <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+          </select></div>
+          <div class="field"><label>Ano</label><input type="number" id="relAno" value="2026" min="2020"></div>
+        </div>
+        <button class="btn btn-primary" onclick="App.gerarRelatorio()">Gerar relatório</button>
+        <button class="btn btn-outline" onclick="App.exportarCSV()">Exportar transações (CSV)</button>
+        <button class="btn btn-outline" onclick="App.exportarPDF()">Imprimir / PDF</button>
+        <div id="relResult" style="margin-top:26px;display:none">
+          <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="kpi-card"><small>Receitas</small><span class="val" style="color:var(--green)" id="relRec">—</span></div>
+            <div class="kpi-card"><small>Despesas</small><span class="val" style="color:#f87171" id="relDes">—</span></div>
+            <div class="kpi-card"><small>Saldo</small><span class="val" id="relSaldo">—</span></div>
+          </div>
+          <h4 style="margin:10px 0 12px;font-size:.95rem">Maiores categorias de gastos</h4>
+          <div class="table-wrap"><table><thead><tr><th>#</th><th>Categoria</th><th style="text-align:right">Total</th><th style="width:45%"></th></tr></thead><tbody id="relCats"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL GENÉRICO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modalTitle">—</h3>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="App.fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" id="modalConfirm">Salvar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
